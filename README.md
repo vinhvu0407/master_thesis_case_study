@@ -92,7 +92,7 @@ MERGE (e1)-[df:DF {EntityType:n.EntityType, ID:n.ID}]->(e2)
 Now we have constructed our Event Knowledge Graph.
 
 
-## 2. Develop a knowledge graph representing domain knowledge
+## 2. Construct a knowledge graph representing domain knowledge
 
 The queries below demonstrate the creation of our knowledge graph through two separate CREATE statements. The first statement establishes nodes and
 their node labels, while the second statement defines relationship types and their respective labels.
