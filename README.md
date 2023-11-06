@@ -151,25 +151,25 @@ CREATE (node1)-[:REL]->(node2), (node1)-[:REL]->(node3), (node1)-[:REL]->(node4)
 
 ## 4. Perform process discovery using the newly constructed domain aware event knowledge graph (DAEKG).
 
-In the following the research questions (RQs) are listed with the corresponding Cypher queries in order to answer the RQs. To explore this research question comprehensively, we
-break it down into smaller, more detailed sub-questions, specifically RQ2.1 to RQ2.9. These initial sub-questions can be answered exclusively using the
+In the following the questions (Q) are listed with the corresponding Cypher queries in order to answer the questions. To explore research question RQ2 comprehensively, we
+break it down into smaller, more detailed sub-questions, specifically Q2.1 to Q2.9. These initial sub-questions can be answered exclusively using the
 event knowledge graph:
 
-* RQ2.1: Which customer placed the most expensive order?
+* Q2.1: Which customer placed the most expensive order?
 
 ```
 MATCH (n1)<-[:CORR]-(n2{Activity: 'pay order'})
 RETURN n1, n2;
 ```
 
-* RQ2.2: What items are included in order O2 and how many packages were created for its delivery?
+* Q2.2: What items are included in order O2 and how many packages were created for its delivery?
 
 ```
 MATCH (n1{ID: 'O2'})<-[:CORR]-(n2{Activity: 'create package'})-[:CORR]->(n3)
 RETURN n1, n2, n3;
 ```
 
-* RQ2.3: Is payment made for orders prior to the creation of their first package? It is a requirement that each order must be paid for before the initial package is created for shipment. It is also possible for orders to be shipped in multiple packages.
+* Q2.3: Is payment made for orders prior to the creation of their first package? It is a requirement that each order must be paid for before the initial package is created for shipment. It is also possible for orders to be shipped in multiple packages.
 
 ```
 MATCH (n1{EntityType:'Order'})<-[:CORR]-(n2)
@@ -177,7 +177,7 @@ WHERE n2.Activity IN ['pay order', 'create package']
 RETURN n1, n2;
 ```
 
-* RQ2.4: Are orders delivered within 21 days? After an order is placed, all packages should be delivered within 21 days.
+* Q2.4: Are orders delivered within 21 days? After an order is placed, all packages should be delivered within 21 days.
 
 ```
 MATCH (n1{EntityType:'Order'})<-[:CORR]-(n2)
@@ -188,21 +188,21 @@ RETURN n1, n2;
 
 The event knowledge graph, when complemented by the constructed knowledge graph, forming the domain-aware event knowledge graph, is capable of addressing more advanced research questions, RQ2.5 to RQ2.9, which seek to provide more detailed answers:
 
-* RQ2.5: Where do our customers live?
+* Q2.5: Where do our customers live?
 
 ```
 MATCH (n1)-[:REL]-(n2)-[:LIVES_IN]->(n3)
 RETURN n1, n2, n3;
 ```
 
-* RQ2.6: What is the customer type of our customers?
+* Q2.6: What is the customer type of our customers?
 
 ```
 MATCH (n1)-[:REL]-(n2)-[:HAS_TYPE]->(n3) 
 RETURN n1, n2, n3;
 ```
 
-* RQ2.7: What is the quantity of packages being sent in small (S), medium (M) and large (L) sizes and are sufficient package sizes still available?
+* Q2.7: What is the quantity of packages being sent in small (S), medium (M) and large (L) sizes and are sufficient package sizes still available?
 
 ```
 MATCH (n1)-[:CORR]->(n2{EntityType:'Package'})-[:REL]-(n3)-[:HAS_SIZE]->(n4)
@@ -210,7 +210,7 @@ WHERE n1.Activity IN ['create package']
 RETURN n1, n2, n3, n4;
 ```
 
-* RQ2.8: Depending on the customer type, were different delivery times adhered to (21 days for basic and regular customers and 14 days for premium customers)?
+* Q2.8: Depending on the customer type, were different delivery times adhered to (21 days for basic and regular customers and 14 days for premium customers)?
 
 ```
 MATCH (n1{EntityType:'Order'})-[:CORR]-(n2)-[:CORR]-(n3)-[:REL]->(n4)-[:HAS_TYPE]->(n5)
@@ -218,7 +218,7 @@ WHERE n2.Activity IN ['place order', 'package delivered']
 RETURN n1, n2, n3, n4, n5;
 ```
 
-* RQ2.9: Could orders O1 and O2 have been delivered on time? If so, what would be the action for achieving this?
+* Q2.9: Could orders O1 and O2 have been delivered on time? If so, what would be the action for achieving this?
 
 ```
 MATCH (n1)-[:CORR]-(n2)-[:CORR]-(n3)-[:CORR]-(n4{EntityType:'Customer'})
